@@ -1,0 +1,6 @@
+C:\CodeStuff\Encyption\Encyption\bin\Debug\Encyption.exe
+C:\CodeStuff\Encyption\Encyption\bin\Debug\Encyption.pdb
+C:\CodeStuff\Encyption\Encyption\obj\Debug\Encyption.csprojResolveAssemblyReference.cache
+C:\CodeStuff\Encyption\Encyption\obj\Debug\Encyption.csproj.CoreCompileInputs.cache
+C:\CodeStuff\Encyption\Encyption\obj\Debug\Encyption.exe
+C:\CodeStuff\Encyption\Encyption\obj\Debug\Encyption.pdb
