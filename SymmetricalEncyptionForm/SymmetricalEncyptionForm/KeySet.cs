@@ -8,6 +8,7 @@ namespace SymmetricalEncyptionForm
 {
     public class KeySet
     {
+        public readonly char[] specialChars = new char[] { '\n' };
         public const int ASCIIRangeStart = 32;
         public const int ASCIIRangeEnd = 126;
 
@@ -27,25 +28,34 @@ namespace SymmetricalEncyptionForm
             EncryptKey = new Dictionary<char, string>();
             DecryptKey = new Dictionary<string, char>();
 
+            //Deal with special values
+            foreach(char input in specialChars)
+            {
+                AppendNewValue(input);
+            }
+            
             //Generate
             for(int i = ASCIIRangeStart; i <= ASCIIRangeEnd; i++)
             {
-                char input = (char)i;
-                string output = string.Empty;
-                //Generate Corresponding Value that is unique
-                do
-                {
-                    StringBuilder val = new StringBuilder();
-                    for (int j = 0; j < charLength; j++)
-                    {
-                        val.Append((char)r.Next(ASCIIRangeStart, ASCIIRangeEnd + 1));
-                    }
-                    output = val.ToString();
-                } while (DecryptKey.ContainsKey(output));
-                //Append key value
-                EncryptKey.Add(input, output);
-                DecryptKey.Add(output, input);
+                AppendNewValue((char)i);
             }
+        }
+
+        private void AppendNewValue(char input)
+        {
+            string output = string.Empty;
+            do
+            {
+                StringBuilder val = new StringBuilder();
+                for (int j = 0; j < charLength; j++)
+                {
+                    val.Append((char)r.Next(ASCIIRangeStart, ASCIIRangeEnd + 1));
+                }
+                output = val.ToString();
+            } while (DecryptKey.ContainsKey(output));
+            //Append key value
+            EncryptKey.Add(input, output);
+            DecryptKey.Add(output, input);
         }
 
         public override string ToString()
