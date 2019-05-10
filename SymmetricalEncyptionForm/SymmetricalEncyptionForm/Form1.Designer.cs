@@ -52,6 +52,7 @@
             // 
             // InputTextBox
             // 
+            this.InputTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.InputTextBox.Location = new System.Drawing.Point(37, 110);
             this.InputTextBox.Name = "InputTextBox";
             this.InputTextBox.Size = new System.Drawing.Size(600, 250);
@@ -60,8 +61,10 @@
             // 
             // OutputTextBox
             // 
+            this.OutputTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.OutputTextBox.Location = new System.Drawing.Point(37, 424);
             this.OutputTextBox.Name = "OutputTextBox";
+            this.OutputTextBox.ReadOnly = true;
             this.OutputTextBox.Size = new System.Drawing.Size(600, 250);
             this.OutputTextBox.TabIndex = 2;
             this.OutputTextBox.Text = "";
@@ -115,8 +118,9 @@
             this.ImportButton.Name = "ImportButton";
             this.ImportButton.Size = new System.Drawing.Size(110, 34);
             this.ImportButton.TabIndex = 7;
-            this.ImportButton.Text = "Import";
+            this.ImportButton.Text = "Close";
             this.ImportButton.UseVisualStyleBackColor = true;
+            this.ImportButton.Click += new System.EventHandler(this.ImportButton_Click);
             // 
             // KeySetButton
             // 

@@ -39,12 +39,17 @@ namespace SymmetricalEncyptionForm
             if(k != null)
             {
                 KeySetNameBox.Enabled = true;
-                KeySetNameBox.Name = k.ToString();
+                KeySetNameBox.Text = k.ToString();
             }
         }
 
         private void EncodeButton_Click(object sender, EventArgs e)
         {
+            if(k == null)
+            {
+                OutputTextBox.ForeColor = Color.Red;
+                OutputTextBox.Text = "No key";
+            }
             StringBuilder s = new StringBuilder();
             string input = InputTextBox.Text;
             for(int i = 0; i < input.Length; i++)
@@ -67,6 +72,11 @@ namespace SymmetricalEncyptionForm
 
         private void DecodeButton_Click(object sender, EventArgs e)
         {
+            if (k == null)
+            {
+                OutputTextBox.ForeColor = Color.Red;
+                OutputTextBox.Text = "No key";
+            }
             StringBuilder s = new StringBuilder();
             string input = InputTextBox.Text;
             for(int i = 0; i < input.Length/k.charLength; i++)
@@ -85,6 +95,11 @@ namespace SymmetricalEncyptionForm
             }
             OutputTextBox.ForeColor = Color.Black;
             OutputTextBox.Text = s.ToString();
+        }
+
+        private void ImportButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
