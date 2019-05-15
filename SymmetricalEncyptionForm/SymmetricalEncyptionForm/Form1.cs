@@ -12,11 +12,12 @@ namespace SymmetricalEncyptionForm
 {
     public partial class MainForm : Form
     {
-        public KeySet k;
+        public ComplexKeySet k;
 
         public MainForm()
         {
             InitializeComponent();
+            k = new ComplexKeySet("default", 2);
             UpdateKeySet();
         }
 
@@ -45,29 +46,30 @@ namespace SymmetricalEncyptionForm
 
         private void EncodeButton_Click(object sender, EventArgs e)
         {
-            if(k == null)
+            if (k == null)
             {
                 OutputTextBox.ForeColor = Color.Red;
                 OutputTextBox.Text = "No key";
             }
-            StringBuilder s = new StringBuilder();
-            string input = InputTextBox.Text;
-            for(int i = 0; i < input.Length; i++)
+            string[] paragraphs = InputTextBox.Text.Split('\n');
+            StringBuilder output = new StringBuilder();
+            try
             {
-                if(k.EncryptKey.TryGetValue(input[i], out string val))
+                Random r = new Random();
+                for (int i = 0; i < paragraphs.Length; i++)
                 {
-                    s.Append(val);
+                    output.Append(k.Encrypt(paragraphs[i],r));
+                    if (i != paragraphs.Length - 1) output.Append('\n');
                 }
+                OutputTextBox.ForeColor = Color.Black;
+                OutputTextBox.Text = output.ToString();
             }
-            //Append x number of extra distractory letters so k.charLength cannot be deduced from number of characters
-            int tailLength = k.r.Next(k.charLength);
-            for(int i = 0; i < tailLength; i++)
+            catch(Exception ex)
             {
-                s.Append((char)k.r.Next(KeySet.ASCIIRangeStart, KeySet.ASCIIRangeEnd));
+                OutputTextBox.ForeColor = Color.Red;
+                OutputTextBox.Text = $"The message could not be encoded. Error: {ex.GetType()} - \"{ex.Message}\"";
             }
-            //Output
-            OutputTextBox.ForeColor = Color.Black;
-            OutputTextBox.Text = s.ToString();
+            
         }
 
         private void DecodeButton_Click(object sender, EventArgs e)
@@ -77,24 +79,24 @@ namespace SymmetricalEncyptionForm
                 OutputTextBox.ForeColor = Color.Red;
                 OutputTextBox.Text = "No key";
             }
-            StringBuilder s = new StringBuilder();
-            string input = InputTextBox.Text;
-            for(int i = 0; i < input.Length/k.charLength; i++)
+            string[] paragraphs = InputTextBox.Text.Split('\n');
+            StringBuilder output = new StringBuilder();
+            try
             {
-                var substring = input.Substring(i * k.charLength, k.charLength);
-                if(k.DecryptKey.TryGetValue(substring, out char c))
+                for (int i = 0; i < paragraphs.Length; i++)
                 {
-                    s.Append(c);
+                    if (string.IsNullOrEmpty(paragraphs[i])) continue;
+                    output.Append(k.Decrypt(paragraphs[i]));
+                    if (i != paragraphs.Length - 1) output.Append('\n');
                 }
-                else
-                {
-                    OutputTextBox.ForeColor = Color.Red;
-                    OutputTextBox.Text = "Decrypt key is Invalid. Decoded: " + s.ToString();
-                    return;
-                }
+                OutputTextBox.ForeColor = Color.Black;
+                OutputTextBox.Text = output.ToString();
             }
-            OutputTextBox.ForeColor = Color.Black;
-            OutputTextBox.Text = s.ToString();
+            catch(Exception ex)
+            {
+                OutputTextBox.ForeColor = Color.Red;
+                OutputTextBox.Text = $"The message could not be encoded. Error: {ex.GetType()} - \"{ex.Message}\"";
+            }
         }
 
         private void ImportButton_Click(object sender, EventArgs e)

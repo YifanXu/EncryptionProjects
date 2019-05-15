@@ -6,15 +6,16 @@ using System.Threading.Tasks;
 
 namespace SymmetricalEncyptionForm
 {
+    [Obsolete]
     public class KeySet
     {
-        public readonly char[] specialChars = new char[] { '\n' };
+        public readonly char[] specialChars = new char[] { '\n', '\t', 'r' };
         public const int ASCIIRangeStart = 32;
         public const int ASCIIRangeEnd = 126;
 
         public readonly string name;
         public readonly int charLength;
-        private readonly int intSeed;
+        private readonly int seed;
         public Random r;
         public Dictionary<char, string> EncryptKey { get; private set; }
         public Dictionary<string, char> DecryptKey { get; private set; }
@@ -23,8 +24,8 @@ namespace SymmetricalEncyptionForm
         {
             this.name = name;
             this.charLength = charLength;
-            this.intSeed = name.GetHashCode();
-            r = new Random(intSeed*charLength);
+            this.seed = name.GetHashCode()*charLength;
+            r = new Random(seed);
             EncryptKey = new Dictionary<char, string>();
             DecryptKey = new Dictionary<string, char>();
 
@@ -43,19 +44,18 @@ namespace SymmetricalEncyptionForm
 
         private void AppendNewValue(char input)
         {
-            string output = string.Empty;
+            StringBuilder output = new StringBuilder();
             do
             {
-                StringBuilder val = new StringBuilder();
+                output.Clear();
                 for (int j = 0; j < charLength; j++)
                 {
-                    val.Append((char)r.Next(ASCIIRangeStart, ASCIIRangeEnd + 1));
+                    output.Append((char)r.Next(ASCIIRangeStart, ASCIIRangeEnd + 1));
                 }
-                output = val.ToString();
-            } while (DecryptKey.ContainsKey(output));
+            } while (DecryptKey.ContainsKey(output.ToString()));
             //Append key value
-            EncryptKey.Add(input, output);
-            DecryptKey.Add(output, input);
+            EncryptKey.Add(input, output.ToString());
+            DecryptKey.Add(output.ToString(), input);
         }
 
         public override string ToString()

@@ -12,9 +12,9 @@ namespace SymmetricalEncyptionForm
 {
     public partial class KeySetDialog : Form
     {
-        public KeySet k;
+        public ComplexKeySet k;
 
-        public KeySetDialog(KeySet currentKey)
+        public KeySetDialog(ComplexKeySet currentKey)
         {
             InitializeComponent();
             k = currentKey;
@@ -28,7 +28,7 @@ namespace SymmetricalEncyptionForm
             f.ShowDialog();
             if(f.DialogResult == DialogResult.OK)
             {
-                k = new KeySet(f.keyName, f.keyLength);
+                k = new ComplexKeySet(f.keyName, f.keyLength);
                 KeySetNameBox.Text = k.name;
                 DisplayKey();
             }
@@ -50,13 +50,13 @@ namespace SymmetricalEncyptionForm
             grid.ColumnCount = 1;
             grid.Columns[0].Name = "Value";
 
-            foreach (var pair in k.EncryptKey)
+            foreach (var pair in k.key)
             {
                 var row = new DataGridViewRow();
-                row.HeaderCell.Value = pair.Key.ToString();
+                row.HeaderCell.Value = pair.key.ToString();
                 row.Cells.Add(new DataGridViewTextBoxCell()
                 {
-                    Value = pair.Value
+                    Value = pair.value
                 });
                 grid.Rows.Add(row);
             }
